@@ -1,12 +1,12 @@
 import json
 import faiss
 import numpy as np
+import streamlit as st
 from sentence_transformers import SentenceTransformer
 from loguru import logger
-from functools import lru_cache
 
 
-@lru_cache(maxsize=1)
+@st.cache_resource
 def load_model(model_name="intfloat/multilingual-e5-base", device="cpu"):
     """
     Загружает модель SentenceTransformer.
@@ -19,7 +19,7 @@ def load_model(model_name="intfloat/multilingual-e5-base", device="cpu"):
     return model
 
 
-@lru_cache(maxsize=1)
+@st.cache_resource
 def load_index(index_path="index/faiss_index.bin"):
     """
     Загружает индекс Faiss.
@@ -31,7 +31,7 @@ def load_index(index_path="index/faiss_index.bin"):
     return index
 
 
-@lru_cache(maxsize=1)
+@st.cache_resource
 def load_metadata(metadata_path="embeddings/metadata.json"):
     """
     Загружает метаданные
