@@ -1,6 +1,7 @@
 import streamlit as st
 import torch
 from search_api import search, load_index, load_metadata, load_model
+from llm_reranker import rerank_with_llm
 from loguru import logger
 
 
@@ -53,7 +54,7 @@ query = st.text_area(
 
 top_k = st.number_input(
     "Количество результатов для вывода:",
-    min_value=1, max_value=50, value=10
+    min_value=1, max_value=20, value=10
 )
 
 rerank_flag = st.checkbox(
@@ -80,9 +81,10 @@ if search_btn:
                 model=st.session_state.model
             )
 
-            # Если включён реранк - заглушка
+            # Переранжирование через LLM
             if rerank_flag:
-                st.info("Перенжирование включено")
+                with st.spinner("Переранжирование через LLM..."):
+                    results = rerank_with_llm(query, results)
 
         except Exception as e:
             st.error(f"Ошибка поиска: {e}")
