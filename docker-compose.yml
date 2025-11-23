@@ -1,0 +1,14 @@
+services:
+  semantic_search:
+    build: .
+    container_name: reverse_text_search_gazetaru
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    volumes:
+      - ./src:/app/src
+      - ./data:/app/data
+      - ./embeddings:/app/embeddings
+      - ./index:/app/index
+    restart: unless-stopped
